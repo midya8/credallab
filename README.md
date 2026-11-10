@@ -6,7 +6,20 @@ CredalLab is a small, exact inspector for finite probability knowledge bases. Gi
 
 It is an original implementation of classical finite probabilistic satisfiability and linear optimization, not a new inference theorem, learned probability model, credal network, calibration benchmark or production safety system.
 
-## The default counterexample
+## Decisions: surviving each rival is not being best
+
+Version 0.2 adds an [exact decision inspector](https://midya8.github.io/credallab/decisions.html). The menu `(3,0), (0,3), (1,1)` makes the difference visible: action 2 can defend against each rival separately, yet no common belief makes it best. A certified 50/50 rival mixture beats it everywhere by `1/2`. It is still the unique pure-action maximin choice.
+
+The extension returns E-admissible, strict pairwise maximal, interval-undominated, pure-action maximin and maximax sets. Inspect one common attaining belief or a dual-derived randomized exclusion mixture, with every primal and dual row. No pointwise-admissibility prefilter; boundary ties stay. These are classical criteria, not a recommendation or new theorem. See [DECISIONS.md](DECISIONS.md) for exact conventions, source differences and limits.
+
+```sh
+credallab decisions examples/decisions/maximal_never_best.json > decisions.json
+credallab verify-decisions decisions.json
+```
+
+Decision development evidence: 96 complete Python/BigInt reports, 824 primitive forgeries, 1,420 input-built HiGHS LPs and 16 installed controls on both CLI entry points. Actual Chrome checks 48 responsive views, 129 action views, 855 certificate selections and 16 downloaded reports. Counts describe finite development cases, not a held-out evaluation. Full old and new reproduction commands are in [DECISIONS.md](DECISIONS.md#developed-evidence).
+
+## The default probability counterexample
 
 Consider three binary variables A, B, C and the events A≠B, A≠C and B≠C. Every binary assignment satisfies either zero or two of these events, never all three. Group assignments with the same event memberships into four worlds:
 
@@ -77,7 +90,7 @@ Developed checks, not held-out evaluation:
 
 | Check | Scope |
 |---|---|
-| Native tests | 16 tests, including world permutation, duplicate assessments, tightening, strict types, alternate witnesses, import independence and CLI failures |
+| Probability native tests | 16 tests, including world permutation, duplicate assessments, tightening, strict types, alternate witnesses, import independence and CLI failures |
 | Complete report agreement | 120 developed cases: 78 feasible, 42 infeasible, 69 with defined positive-mass conditional bounds |
 | Certificate mutations | 505 primitive modifications rejected across three developed reports |
 | Independent floating reference | 690 rebuilt HiGHS LPs, including 138 Charnes-Cooper conditional LPs; tolerance `1e-8` |
