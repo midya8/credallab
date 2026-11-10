@@ -1,0 +1,1 @@
+{"version":1,"worlds":3,"constraints":[{"event":[0],"lower":[1,6],"upper":[1,6]},{"event":[1],"lower":[1,3],"upper":[1,3]}],"query":{"event":[1],"given":[1,2]}}
