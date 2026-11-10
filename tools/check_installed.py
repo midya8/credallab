@@ -10,7 +10,7 @@ def call(args,**kw):return subprocess.run(args,check=True,capture_output=True,te
 with tempfile.TemporaryDirectory()as d:
  t=Path(d);w=t/'wheels';w.mkdir();call([sys.executable,'-m','pip','wheel','--no-deps','--no-build-isolation','-w',str(w),str(ROOT)]);wheel=next(w.glob('*.whl'));env=t/'env';venv.create(env,with_pip=True);py=str(env/'bin/python');exe=str(env/'bin/credallab');call([py,'-m','pip','install','--no-deps',str(wheel)]);clean=t/'outside';clean.mkdir();en=os.environ.copy();en.pop('PYTHONPATH',None)
  code='''import importlib,importlib.metadata,pathlib,sys
-assert importlib.metadata.version('credallab-finite')=='0.1.0'
+assert importlib.metadata.version('credallab-finite')=='0.2.0'
 for name in ['credallab','credallab.model','credallab.engine','credallab.certificate','credallab.controls','credallab.__main__']:
  p=pathlib.Path(importlib.import_module(name).__file__).resolve();assert 'site-packages' in str(p)and not str(p).startswith(sys.argv[1])
 ''';call([py,'-c',code,str(ROOT)],cwd=clean,env=en)
