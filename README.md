@@ -1,12 +1,24 @@
 # CredalLab
 
-**Each probability can look valid. Their joint model can still be impossible.**
+Supply a small finite world model, unconditional probability intervals and an
+event query. CredalLab checks whether one joint distribution satisfies all
+assessments, returns sharp attainable query bounds when it can, and exports
+primal/dual certificates for independent replay.
 
-CredalLab is a small, exact inspector for finite probability knowledge bases. Give it explicit worlds, unconditional interval assessments and an event query. It checks whether one joint distribution can satisfy every assessment, returns sharp attainable bounds when it can, and exports independently replayable primal/dual certificates.
+A separate decision mode compares actions over the same credal set. It shows
+when an action can defend against every rival separately but cannot be best
+under any one common belief.
 
 It is an original implementation of classical finite probabilistic satisfiability and linear optimization, not a new inference theorem, learned probability model, credal network, calibration benchmark or production safety system.
 
-## Decisions: surviving each rival is not being best
+## Choose an analysis
+
+| Question | Entry point | Result |
+| --- | --- | --- |
+| Can the supplied probability assessments hold together? | `run`, `verify`, `docs/index.html` | Consistency slack, attainable event and positive-mass conditional bounds, primal/dual witnesses |
+| Which actions meet each decision criterion? | `decisions`, `verify-decisions`, `docs/decisions.html` | Action sets, common attaining beliefs and randomized exclusion witnesses |
+
+## Decision criteria use different belief requirements
 
 Version 0.2 adds an [exact decision inspector](https://midya8.github.io/credallab/decisions.html). The menu `(3,0), (0,3), (1,1)` makes the difference visible: action 2 can defend against each rival separately, yet no common belief makes it best. A certified 50/50 rival mixture beats it everywhere by `1/2`. It is still the unique pure-action maximin choice.
 
@@ -19,7 +31,7 @@ credallab verify-decisions decisions.json
 
 Decision development evidence: 96 complete Python/BigInt reports, 824 primitive forgeries, 1,420 input-built HiGHS LPs and 16 installed controls on both CLI entry points. Actual Chrome checks 48 responsive views, 129 action views, 855 certificate selections and 16 downloaded reports. Counts describe finite development cases, not a held-out evaluation. Full old and new reproduction commands are in [DECISIONS.md](DECISIONS.md#developed-evidence).
 
-## The default probability counterexample
+## Individually valid bounds can be jointly impossible
 
 Consider three binary variables A, B, C and the events A≠B, A≠C and B≠C. Every binary assignment satisfies either zero or two of these events, never all three. Group assignments with the same event memberships into four worlds:
 
@@ -65,7 +77,7 @@ assert report["bounds"]["event"]["upper"]["value"] == [1, 2]
 
 Those two half-probability marginals do not justify an independence guess of `1/4` for their intersection.
 
-## What the evidence contains
+## Inspect the certificates
 
 - A common-slack consistency LP, with an attaining distribution and dual certificate. A strictly positive minimum slack proves the original assessments impossible.
 - Exact event and given-event minima and maxima, with attaining distributions.
@@ -75,6 +87,11 @@ Those two half-probability marginals do not justify an independence guess of `1/
 - Editing clears old results and disables download until a fresh successful check.
 
 ## Reproduction
+
+The current suite has 31 Python tests and six Node/actual-Chrome tests,
+including the original probability and later decision workflows. The tables
+below keep their coverage separate. Optional HiGHS comparisons are external
+floating-point cross-checks, not runtime dependencies or formal proofs.
 
 ```sh
 python -m unittest discover -s tests -v
